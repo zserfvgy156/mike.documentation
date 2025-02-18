@@ -14,7 +14,7 @@
 
 <br />
 
-> 可以從 Xcode -> settings -> Locations (Command Line Tools) 查看目前專案的指定工具路徑。
+> 可以從 Xcode -> settings -> Locations -> Command Line Tools 查看目前專案的路徑。
 <br />
 <img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/3/images/1.png" width="600" height="280">
 
