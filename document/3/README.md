@@ -10,5 +10,30 @@
 
 <br />
 
+## sourcekit-lsp 多版本設定處理
+
+<br />
+
+> 可以從 Xcode -> settings -> Locations (Command Line Tools) 查看目前專案的指定工具路徑。
+<br />
+<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/3/images/1.png" width="600" height="280">
+
+<br />
+<br />
+
+> VSCode 設定 -> 搜尋 lsp -> Swift:Path
+<br />
+把剛剛的路徑 (/Applications/Xcode_16.1.app)，尾部再補 "/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"。
+<br />
+完整路徑 (/Applications/Xcode_16.1.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin)
+
+<br />
+<br />
+
+<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/3/images/2.png" width="500" height="280">
+
+
+<br />
+
 ## Cursor AI 教學
 待補充
