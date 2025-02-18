@@ -64,21 +64,21 @@ public void _sdkDidInit(string vendorid, bool isDebug) {
 
 ### 方法一：.h、.mm 接口處理
 
-在 Unity Project 底下建立 `Assets/Plugins/iOS` 的目錄結構，並新增 `XinStarSdkUnity.h` 跟 `XinStarSdkUnity.mm` 兩個檔案，它的用途是要建立 API，可以收字串訊息。
+在 Unity Project 底下建立 `Assets/Plugins/iOS` 的目錄結構，並新增 `TestSdkUnity.h` 跟 `TestSdkUnity.mm` 兩個檔案，它的用途是要建立 API，可以收字串訊息。
 
 **iOS 端專案**  
 ```swift
 public class UnityBridge: NSObject {
     /// 初始化
     static func initSDK() {
-        guard Self.xinStarSDK == nil,
+        guard Self.testSDK == nil,
         let rootViewController = UIApplication.shared.windows.first?.rootViewController
         else { return  }
         
-        Self.xinStarSDK = .init(rootViewController)
-        xinStarSDK?.resultCallBack = { str in
+        Self.testSDK = .init(rootViewController)
+        testSDK?.resultCallBack = { str in
 	    // Start - 呼叫委派的地方 (要寫的部分)
-            if let result = xinStarSdkResult {
+            if let result = testSdkResult {
                 result(str)
             }
 	    // End 
@@ -88,13 +88,13 @@ public class UnityBridge: NSObject {
     /// 註冊 framework delegate (要寫的部分)
     /// - Parameter delegate: 回傳格式
     @objc static func reqistrationReplyResult(_ delegate: @escaping (String) -> Void) {
-        UnityBridge.xinStarSdkResult = delegate
+        UnityBridge.testSdkResult = delegate
     }
 }
 
 // MARK: Delegates (要寫的部分)
 public extension UnityBridge {
-    static var xinStarSdkResult: ((String) -> Void)?
+    static var testSdkResult: ((String) -> Void)?
 }
 ```
 
@@ -103,32 +103,32 @@ public extension UnityBridge {
 底下為 .h、.mm 要處理的接口。
 ```objc
 //
-// XinStarSdkUnity.h
+// TestSdkUnity.h
 //
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@interface XinStarSdkUnity : NSObject
+@interface TestSdkUnity : NSObject
 
 @end
 
 //
-// XinStarSdkUnity.mm
+// TestSdkUnity.mm
 //
-#import "XinStarSdkUnity.h"
+#import "TestSdkUnity.h"
 /// 此處路徑可拆開 framework/Headers 中取得
-#import <XinStarLoginSdk/XinStarLoginSdk-Swift.h>
-@interface XinStarSdkUnity ()
+#import <TestLoginSdk/TestLoginSdk-Swift.h>
+@interface TestSdkUnity ()
 @end
 
-@implementation XinStarSdkUnity
+@implementation TestSdkUnity
 
 extern "C" {
     typedef void (*ReplyResult)(const char* result);
-    void reqistrationOinkeyReplyResult(ReplyResult value);
+    void reqistrationReplyResult(ReplyResult value);
 }
 
-void reqistrationOinkeyReplyResult(ReplyResult value){
+void reqistrationReplyResult(ReplyResult value){
     /// 這邊要跟swift 制定好的 func 名稱一致
     [UnityBridge reqistrationReplyResult:^(NSString * Result) {
         value((char *)[Result UTF8String]);
@@ -143,15 +143,15 @@ public class iOSLoginSDK
 {    
     // 跟 Unity 呼叫 iOS 方法一致，只是傳參數改成閉包類型 (該宣告下方)。
     [DllImport("__Internal")]
-    static extern void reqistrationOinkeyReplyResult(onXinStarSdkResultType value);
+    static extern void reqistrationReplyResult(onTestSdkResultType value);
 
     // 閉包類型 (方法名稱不用一樣，但是傳參數要跟 iOS 端自訂的一樣。)
-    private delegate void onXinStarSdkResultType(string value);
+    private delegate void onTestSdkResultType(string value);
         
     // Unity 接收端 
     // MonoPInvokeCallback 裏面方法要跟閉包類型 (該宣告上方) 名稱要一致。
-    [MonoPInvokeCallback(typeof(onXinStarSdkResultType))]
-    public static void XinStarSdkResult(string value)
+    [MonoPInvokeCallback(typeof(onTestSdkResultType))]
+    public static void TestSdkResult(string value)
     {     
         Debug.Log("This static function has been called from iOS!");
         Debug.Log(value);            
@@ -161,7 +161,7 @@ public class iOSLoginSDK
     public iOSLoginSDK() 
     {
         /// 註冊回呼
-        reqistrationOinkeyReplyResult(XinStarSdkResult);
+        reqistrationReplyResult(TestSdkResult);
     }
 }
 ```
@@ -176,9 +176,9 @@ public class UnityBridge: NSObject {
     /// 初始化
     static func initSDK() {
         ...忽略
-        xinStarSDK?.resultCallBack = { str in
+        testSDK?.resultCallBack = { str in
 	    // Start - 呼叫委派的地方 (要寫的部分)
-             if let result = xinStarSdkResult,
+             if let result = testSdkResult,
            	let nsStr = (str as NSString).utf8String { // 字串需要額外轉成 c 
             	    result(nsStr)
         	}
@@ -190,14 +190,14 @@ public class UnityBridge: NSObject {
 /// 註冊 framework delegate (要寫的部分)
 /// 直接對應到 Unity 端的 DllImport，方法要一致。
 /// - Parameter delegate: 委派
-@_cdecl("reqistrationOinkeyReplyResult")
-public func reqistrationOinkeyReplyResult(delegate: @convention(c) @escaping (UnsafePointer<CChar>) -> Void) { // @convention(c) 回呼是以 c 語言為主，參數類型要改成 c 語言可接受的類型。
-    UnityBridge.xinStarSdkResult = delegate
+@_cdecl("reqistrationReplyResult")
+public func reqistrationReplyResult(delegate: @convention(c) @escaping (UnsafePointer<CChar>) -> Void) { // @convention(c) 回呼是以 c 語言為主，參數類型要改成 c 語言可接受的類型。
+    UnityBridge.testSdkResult = delegate
 }
 
 // MARK: Delegates (要寫的部分)
 public extension UnityBridge {
-    static var xinStarSdkResult: ((UnsafePointer<CChar>) -> Void)? // 參數要改成 c 語言可接受的類型
+    static var testSdkResult: ((UnsafePointer<CChar>) -> Void)? // 參數要改成 c 語言可接受的類型
 }
 ```
 
@@ -220,7 +220,7 @@ XXX.framework 直接複製到 Unity 專案底下。
 
 ![image](images/md_image_3_1.png)
 <br>
-> **目前 Oinkey 專案的路徑**  
+> **目前專案的路徑**  
 > <br>
 > ![image](images/md_image_3_2.png)
 
