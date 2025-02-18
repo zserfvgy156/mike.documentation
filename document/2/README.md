@@ -15,8 +15,8 @@ public class UnityBridge: NSObject {
 }
 
 // Unity 主要呼叫的接口 (要寫的部分)
-@_cdecl("yoeSdkDidInit")
-public func yoeSdkDidInit(_ vendorid: UnsafePointer<CChar>?, _ isDebug: Bool) {
+@_cdecl("sdkDidInit")
+public func sdkDidInit(_ vendorid: UnsafePointer<CChar>?, _ isDebug: Bool) {
     
     guard let vendorid = vendorid else {
         return
@@ -43,15 +43,15 @@ public func yoeSdkDidInit(_ vendorid: UnsafePointer<CChar>?, _ isDebug: Bool) {
 
 ```c#
 [DllImport("__Internal")]
-static extern void yoeSdkDidInit(string vendorid, bool isDebug);
+static extern void sdkDidInit(string vendorid, bool isDebug);
 ```
 
 Unity 該宣告的類別底下，就可以直接使用。
 
 ```c#
-public void _yoeSdkDidInit(string vendorid, bool isDebug) {
+public void _sdkDidInit(string vendorid, bool isDebug) {
 	#if UNITY_IOS && EDITOR_MPLATFORM_IOS
-	yoeSdkDidInit(vendorid, isDebug); // 呼叫 sdk 接口方法
+	sdkDidInit(vendorid, isDebug); // 呼叫 sdk 接口方法
 	#endif
 }
 ```
