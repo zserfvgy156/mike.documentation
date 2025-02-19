@@ -1,39 +1,105 @@
-# VSCode/Cursor iOS 專案製作
+## SwiftUI 學習筆記
 <br />
 
-## 安裝流程
-1. [VSCode iOS 專案開發](https://dimillian.medium.com/how-to-use-cursor-for-ios-development-54b912c23941)
-2. [Inject 熱更新](https://rebeloper.com/blog/how-to-develop-ios-and-macos-apps-in-vs-code)
 
-> [!WARNING]
-> 由於 Inject 無法選取元件本身，所以推薦直接開 XCode 處理，可參考[彼得潘推薦做法](https://medium.com/%E5%BD%BC%E5%BE%97%E6%BD%98%E7%9A%84-swift-ios-app-%E9%96%8B%E7%99%BC%E5%95%8F%E9%A1%8C%E8%A7%A3%E7%AD%94%E9%9B%86/%E5%90%8C%E6%99%82%E4%BD%BF%E7%94%A8-vs-code-github-copilot-%E5%92%8C-xcode-preview-%E9%96%8B%E7%99%BC-app-55cff896d752)。
+### ObservableObject 用法
+
+`ObservableObject` 用於 class，並且把它當作一個觀察對象，並在想要監聽的參數補上 `@Published`，當有監聽參數有被設定時 (值非變化)，便會通知外部更新。
+
+```swift
+final class ViewModel: ObservableObject {
+    @Published var value = 1
+
+    func randomValue() {
+        value = Int.random(in: 1...10)
+    }
+}
+
+struct TestView: View {
+    @ObservedObject var viewModel = ViewModel()
+
+    var body: some View {
+        VStack {
+            Text("Value is: \(viewModel.value)")
+            Button("Click") {
+                viewModel.randomValue()
+            }
+        }
+    }
+}
+```
+
+不用 `@Published` 寫法，可直接使用 `objectWillChange.send()`，也可以達到相同效果。
+
+```swift
+final class ViewModel: ObservableObject {
+    private(set) var value = 1
+
+    func randomValue() {
+        value = Int.random(in: 2...10)
+        objectWillChange.send() // 主要這句
+    }
+}
+```
+<br />
+
+### StateObject 用法
+
+直接看下面範例：
+
+```swift
+struct TestView: View {
+    @StateObject var viewModel = ViewModel() // ObservedObject -> StateObject
+
+    var body: some View {
+        VStack {
+            Text("Value is: \(viewModel.value)")
+            Button("Click") {
+                viewModel.randomValue()
+            }
+        }
+    }
+}
+
+//最外層 View
+struct ContentView: View {
+
+    @State private var backgroundColor: Color = .blue
+
+    var body: some View {
+  
+        VStack {
+            // 測試介面
+            TestView()
+            // 點擊按鈕，單純改變 ContentView.Button 背景顏色。
+            Button("Change Color") {
+                backgroundColor = Color(
+                    red: Double.random(in: 0...1),
+                    green: Double.random(in: 0...1), 
+                    blue: Double.random(in: 0...1)
+                )
+            }
+            .foregroundColor(.black)
+            .background(backgroundColor)
+            .frame(width: 100, height: 50)
+        }
+        .padding()
+    }
+}
+```
+
+ObservedObject
+<br />
+`TestView.randomValue() -> 參數隨機 (假如是 2) -> ContentView.Button("Change Color").click -> 參數會被重置為 1`
 
 <br />
 
-## sourcekit-lsp 多版本設定處理
+StateObject／State
+<br />
+`TestView.randomValue() -> 參數隨機 (假如是 2) -> ContentView.Button("Change Color").click -> 參數不變`
 
 <br />
 
-> 可以從 Xcode -> settings -> Locations -> Command Line Tools 查看目前專案的路徑。
-<br />
-<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/3/images/1.png" width="600" height="280">
-
-<br />
-<br />
-
-> VSCode 設定 -> 搜尋 lsp -> Swift:Path
-<br />
-把剛剛的路徑 (/Applications/Xcode_16.1.app)，尾部再補 "/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"。
-<br />
-完整路徑 (/Applications/Xcode_16.1.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin)
-
-<br />
-<br />
-
-<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/3/images/2.png" width="500" height="280">
 
 
-<br />
 
-## Cursor AI 教學
-待補充
