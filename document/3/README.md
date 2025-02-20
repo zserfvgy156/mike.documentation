@@ -36,5 +36,17 @@
 
 <br />
 
-## Cursor AI 教學
-待補充
+## Cursor AI 功能
+- Cursor Tab
+
+有時會用灰字／tab 提示，可直接點擊 tab 自動完成輸入。
+<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/4/images/3.png" width="500" height="280">
+<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/4/images/4.png" width="500" height="280">
+
+<br />
+
+- Inline edit
+- Chat
+
+- The Composer
+
