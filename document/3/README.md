@@ -37,16 +37,77 @@
 <br />
 
 ## Cursor AI 功能
-- Cursor Tab
+### Cursor Tab
 
-有時會用灰字／tab 提示，可直接點擊 tab 自動完成輸入。
-<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/4/images/3.png" width="500" height="280">
-<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/4/images/4.png" width="500" height="280">
+會有`灰字／tab` 提示，點擊按鍵 tab 來完成自動輸入。
+
+<br />
+<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/3/images/3.png" width="450" height="120">
+<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/3/images/4.png" width="500" height="280">
 
 <br />
 
-- Inline edit
-- Chat
+### Inline edit
 
-- The Composer
+分為`可選/不可選文字代碼`行間編輯功能，依照使用者給的建議，生成相對應的代碼，期間可以再補充細節建議。
+<br />
+<br />
+
+1. 未選取代碼
+
+<br />
+
+浮標只要點擊一處，就會有 chat 與 Inline edit 快捷建議。
+
+<br />
+
+<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/3/images/5.png" width="450" height="120">
+
+<br />
+
+呼叫後，可以直接輸入想要的規格／敘述，便會生成下方代碼，然後右下角可以補充詳細細節。
+<br />
+<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/3/images/6.png" width="400" height="480">
+
+<br />
+<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/3/images/7.png" width="400" height="90">
+
+<br />
+<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/3/images/8.png" width="300" height="300">
+
+<br />
+
+2. 選取代碼
+
+<br />
+
+針對指定選取區域做改寫，其他流程跟未選取代碼差不多。
+
+<br />
+
+<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/3/images/9.png" width="390" height="320">
+
+<br />
+
+<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/3/images/10.png" width="370" height="320">
+
+<br />
+
+<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/3/images/11.png" width="370" height="320">
+
+
+### Chat
+
+如 Inline edit 呼叫方法一樣，呼叫後 VSCode 右邊會有面板會顯示詢問結果，也可以直接在右側面板提問。
+<br />
+可以直接在右側面板選取多個檔案，或者是像 Inline edit 選取/不選取時提問 (此時以提問的檔案為主)。
+
+<br />
+<img src="https://github.com/zserfvgy156/mike.documentation/blob/main/document/3/images/12.png" width="400" height="680">
+
+### The Composer
+不常使用，待補。
+
+<br />
+<br />
 
