@@ -105,6 +105,7 @@ StateObject／State
 <br />
 
 1. [Intrinsic content size in SwiftUI](https://medium.com/@sarunw/intrinsic-content-size-in-swiftui-aeb86f66b5e4)
+2. [掌握 SwiftUI 的 task 修饰器](https://fatbobman.com/zh/posts/mastering_swiftui_task_modifier/)
 
 <br />
 <br />
