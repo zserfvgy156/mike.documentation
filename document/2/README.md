@@ -8,10 +8,23 @@
 ```
 @_cdecl 名稱要跟 func 名稱一致。
 ```swift
-// 給 Unity 使用的橋接器
+/// 給 Unity 使用的橋接器
 public class UnityBridge: NSObject {
-    private static var sdk: SDK?  // 我們的 sdk
-    public static func initUI(vendorid: String, isDebug: Bool) {...} // 宣告的靜態接口
+    
+    /// 我們的 sdk
+    private static var sdk: SDK?  
+    
+    /// 宣告的靜態接口
+    public static func initUI(vendorid: String, isDebug: Bool) {
+    
+        /// 確認 sdk 是否生成
+        guard Self.sdk == nil,
+              let rootViewController = UIApplication.shared.windows.first?.rootViewController else {
+            return
+        }
+        /// 初始化
+        Self.sdk = .init(rootViewController, vendorid: vendorid, isDebug: isDebug)
+    } 
 }
 
 // Unity 主要呼叫的接口 (要寫的部分)
@@ -28,10 +41,8 @@ public func sdkDidInit(_ vendorid: UnsafePointer<CChar>?, _ isDebug: Bool) {
 ```
 
 > 備註：
-> <br>
 > iOS 端專案特定傳參數需要使用到 c 語言 **UnsafePointer** 類型
-> <br>
-> ex: string ->  UnsafePointer\<CChar\>
+> ex: string → UnsafePointer\<CChar\>
 
 ### Unity 端專案
 
@@ -71,11 +82,14 @@ public void _sdkDidInit(string vendorid, bool isDebug) {
 public class UnityBridge: NSObject {
     /// 初始化
     static func initSDK() {
+    
         guard Self.testSDK == nil,
-        let rootViewController = UIApplication.shared.windows.first?.rootViewController
-        else { return  }
+              let rootViewController = UIApplication.shared.windows.first?.rootViewController else { 
+            return  
+        }
         
         Self.testSDK = .init(rootViewController)
+        
         testSDK?.resultCallBack = { str in
 	    // Start - 呼叫委派的地方 (要寫的部分)
             if let result = testSdkResult {
@@ -111,25 +125,29 @@ public extension UnityBridge {
 @interface TestSdkUnity : NSObject
 
 @end
-
+```
+```objc
 //
 // TestSdkUnity.mm
 //
 #import "TestSdkUnity.h"
 /// 此處路徑可拆開 framework/Headers 中取得
 #import <TestLoginSdk/TestLoginSdk-Swift.h>
-@interface TestSdkUnity ()
-@end
+
 
 @implementation TestSdkUnity
 
+/// Objective-C 代碼中調用 C++ 庫或 C 函式 
 extern "C" {
+    /// 定義閉包名稱
     typedef void (*ReplyResult)(const char* result);
-    void reqistrationReplyResult(ReplyResult value);
+    /// 擴充方法
+    void reqistrationUnityReplyResult(ReplyResult value);
 }
 
-void reqistrationReplyResult(ReplyResult value){
-    /// 這邊要跟swift 制定好的 func 名稱一致
+/// 該方法名稱與參數要與上述一致
+void reqistrationUnityReplyResult(ReplyResult value){
+    /// 這邊要跟 <iOS 端> 制定好的 func 名稱一致
     [UnityBridge reqistrationReplyResult:^(NSString * Result) {
         value((char *)[Result UTF8String]);
     }];
@@ -141,9 +159,9 @@ void reqistrationReplyResult(ReplyResult value){
 ```C#
 public class iOSLoginSDK 
 {    
-    // 跟 Unity 呼叫 iOS 方法一致，只是傳參數改成閉包類型 (該宣告下方)。
+    // 跟 XinStarSdkUnity.mm 宣告的方法一致，只是傳參數改成閉包類型 (該宣告下方)。
     [DllImport("__Internal")]
-    static extern void reqistrationReplyResult(onTestSdkResultType value);
+    static extern void reqistrationUnityReplyResult(onTestSdkResultType value);
 
     // 閉包類型 (方法名稱不用一樣，但是傳參數要跟 iOS 端自訂的一樣。)
     private delegate void onTestSdkResultType(string value);
@@ -161,7 +179,7 @@ public class iOSLoginSDK
     public iOSLoginSDK() 
     {
         /// 註冊回呼
-        reqistrationReplyResult(TestSdkResult);
+        reqistrationUnityReplyResult(TestSdkResult);
     }
 }
 ```
@@ -175,7 +193,7 @@ public class iOSLoginSDK
 public class UnityBridge: NSObject {
     /// 初始化
     static func initSDK() {
-        ...忽略
+        // ...忽略
         testSDK?.resultCallBack = { str in
 	    // Start - 呼叫委派的地方 (要寫的部分)
              if let result = testSdkResult,
@@ -207,8 +225,12 @@ public extension UnityBridge {
 
 
 ## Building framework
-
-XXX.framework 直接複製到 Unity 專案底下。
+請參考下列步驟：
+1. 在 <專案-Demo> 調整版號 
+2. Xcode Build
+3. 按照下圖尋找 framework 檔案路徑，通常資料夾名稱為 <專案名_亂數.framework>，假如有出現亂數不同的情況，請都全部刪掉重 build。
+4. 點進資料夾後，在 info.plist 檔案檢查版號是否正確。
+5. framework 檔案直接複製到 Unity 專案底下
 
 ![image](images/md_image_2_1.png)
 
@@ -250,8 +272,13 @@ XXX.framework 直接複製到 Unity 專案底下。
 <br>
 ![image](images/md_image_5_3.png)
 <br>
-
 <br>
+
+## 產 IPA
+
+請參考下列步驟：
+1. Xcode 點擊 `Product → archive` 
+2. 檢查版號是否正確，若正確再點擊 `Distribute App → Release Testing → export，選擇要產出的位置。`。
 <br>
 
 ## 參考資料
