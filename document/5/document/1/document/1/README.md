@@ -31,11 +31,6 @@
 ```
 
 
-### @property 的基本用法
-
-
-
-
 
 ### @property 的常見屬性（attributes）
 

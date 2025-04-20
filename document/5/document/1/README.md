@@ -109,13 +109,13 @@
 
 1. 公開參數
 ```objc
-// MyClass
+// MyClass.h
 @interface MyClass : NSObject
 @property (nonatomic, strong) NSString *title;
 @end
 ```
 ```objc
-// MyClass.h
+// MyClass.m
 #import "MyClass.h"
 @implementation MyClass
 // 這裡什麼都不用寫，系統自動生成 getter/setter
@@ -132,13 +132,13 @@ NSLog(@"%@", obj.title);       // 呼叫 getter：title
 2. 私有參數 + 自訂setter/getter
 
 ```objc
-// MyClass
+// MyClass.h
 @interface MyClass : NSObject
 @property (nonatomic, strong) NSString *title;
 @end
 ```
 ```objc
-// MyClass.h
+// MyClass.m
 #import "MyClass.h"
 
 @interface MyClass()
@@ -157,6 +157,56 @@ NSLog(@"%@", obj.title);       // 呼叫 getter：title
 }
 @end
 
+```
+
+
+### 類別分類（Category）範例（通常用來加功能）
+
+- 特點：
+   * 用來擴充原本 class 的`方法`
+   * 不能新增`屬性`
+   * 可以分成很多 category 檔案，幫助整理程式碼模組
+
+```objc
+// User.h
+#import <Foundation/Foundation.h>
+
+@interface User : NSObject
+
+- (void)printInfo;
+
+@end
+```
+
+```objc
+// User+Helper.h
+#import "User.h"
+
+@interface User (Helper)
+
+- (NSString *)userType;
+
+@end
+```
+
+```objc
+// User+Helper.m
+#import "User+Helper.h"
+
+@implementation User (Helper)
+
+- (NSString *)userType {
+    return @"普通用戶";
+}
+
+@end
+```
+
+
+```objc
+// Main.m
+User *user = [[User alloc] init];
+NSString *type = [user userType];
 ```
 
 
