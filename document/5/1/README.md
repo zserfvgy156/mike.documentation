@@ -55,7 +55,7 @@
 ```objc
 // MyClass.h
 @interface MyClass : NSObject
-// 公有屬性
+// 公有屬性 (外部可以讀取與寫入)
 // @property (nonatomic, strong) NSString *secret;
 - (void)logSecret;
 @end
