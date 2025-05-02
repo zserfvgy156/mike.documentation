@@ -38,9 +38,9 @@
    * `nonatomic`：非原子性（效能較好，最常用）
    * `atomic`：預設值，執行緒安全但效能較差（很少特別寫）
 - 其他屬性
-   * `strong`：預設用於物件型別（表示擁有該物件）
-   * `weak`：弱引用，通常用於 delegate，避免 retain cycle
-   * `assign`：用於基本資料型別（如 int, float, BOOL）
+   * `strong`：預設用於物件型別（表示擁有該物件，如：NSString）
+   * `weak`：弱引用，通常用於 delegate 與介面，避免 retain cycle
+   * `assign`：用於基本資料型別（如：int, float, BOOL, NSInteger, CGFloat, CGSize）
    * `copy`：用於 NSString 或 block，保證是不可變的複製體
 
 
