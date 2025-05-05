@@ -15,7 +15,7 @@
 
 
 ### 範例說明
-#### id 範例（較不安全）
+#### `id` 範例（較不安全）
 ```objc
 // XXX.m
 // 此處回傳 NSString 類型
@@ -35,7 +35,7 @@ id obj = [self createObject];
 
 
 
-#### instancetype 範例（較安全）：
+#### `instancetype` 範例（較安全）：
 ```objc
 // XXX.m
 // 此處回傳 NSString 類型
@@ -59,6 +59,32 @@ MyPerson *p = [MyPerson person];
 | 建構子（如 `init` 或工廠方法） | `instancetype` |
 | 要保持型別安全性與補全支援 | `instancetype` 優先 |
 
+
+### `id<XXX>` 是什麼意思？
+
+表示「任何符合 XXX 協定的物件」，一個物件可以符合多個協定。
+> < XXX >：限定這個物件必須符合某個 protocol（協定）
+
+```objc
+// 協議一
+@protocol A
+-(void) methodA;
+@end
+
+// 協議二
+@protocol B <A>
+-(void) methodB;
+@end
+
+
+// 使用 id<A, B>
+- (void)testMethod:(id<A, B>)test {
+    // ✅ 安全，因為已保證實作了 methodA 與 methodB 方法
+    [test methodA]; 
+    [test methodB];
+}
+
+```
 
 
 
