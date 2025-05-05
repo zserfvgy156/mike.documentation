@@ -101,9 +101,16 @@ NSString *msg = [MyClass defaultMessage];  // ✅ 正確：透過類別呼叫
 ```
 <br />
 
-## `@class` 前向宣告
-- 宣告會用到某個類別的名稱，但不需要知道實作。
-- 避免循環引用
+
+
+## 前向宣告
+「前向宣告（Forward Declaration）」是用來預先告訴編譯器某個類別或協定存在，但暫時不需要知道其詳細內容，這麼做能夠避免循環引用、加快編譯速度。
+
+
+### 類別的前向宣告：`@class`
+
+- 不需要 `#import "MyClass.h"`，除非你要使用 MyClass 的方法或創建實例。
+- 常見於 `.h` 檔案中，避免檔案之間互相 `import（循環依賴）`。
 ```objc
 // Person.h
 
@@ -117,7 +124,7 @@ NSString *msg = [MyClass defaultMessage];  // ✅ 正確：透過類別呼叫
 @end
 ```
 
-### 避免循環引用
+#### 避免循環引用
 如果兩邊都寫 `#import`，會造成循環引入（編譯失敗）。用 `@class` 可以避免這個問題。
 
 ```objc
@@ -137,8 +144,7 @@ NSString *msg = [MyClass defaultMessage];  // ✅ 正確：透過類別呼叫
 @end
 ```
 
-
-### `#import`使用時機
+#### `#import`使用時機
 - 當你要存取那個類別的方法、屬性或實作內容。
 - 或者在 `.m` 檔案中真正要使用那個類別
 ```objc
@@ -149,6 +155,100 @@ NSString *msg = [MyClass defaultMessage];  // ✅ 正確：透過類別呼叫
     [self.car startEngine]; // 需要知道 car 有這個方法
 }
 ```
+
+
+### 協定的前向宣告：`@protocol`
+
+```objc
+// MyButton.h
+
+@protocol MyButtonDelegate, XXXDelegate; // 前向宣告協定，與 `@class` 相似。
+
+
+@interface MyButton : NSObject
+@property (nonatomic, weak) id<MyButtonDelegate> delegate;
+@property (nonatomic, weak) id<XXXDelegate> delegateTwo;
+- (void)press; // 模擬按下按鈕
+@end
+
+@protocol MyButtonDelegate <NSObject>
+@required
+- (void)buttonDidPress:(MyButton *)button;
+@end
+
+```
+
+
+
+
+
+
+
+<br />
+
+
+## `@protocol` 協定
+
+用來定義一組方法的規範，讓其他類別可以「遵守（conform to）這個協定」，並實作這些方法。
+它的作用類似於其他語言中的「interface」。
+
+```objc
+// ProtocolName.h
+@protocol ProtocolName <需要繼承的 Class (可以不寫)>
+
+// 可選的方法
+@optional
+- (void)optionalMethod;
+
+// 必須實作的方法
+@required
+- (void)requiredMethod;
+
+@end
+```
+
+### 範例
+```objc
+// Animal.h
+@protocol Animal <NSObject>
+
+@required
+- (void)speak;
+
+@optional
+- (void)run;
+
+@end
+```
+
+```objc
+// Dog.h
+@interface Dog : NSObject <Animal>
+@end
+```
+
+```objc
+// Dog.m
+@implementation Dog
+
+- (void)speak {
+    NSLog(@"Woof!");
+}
+
+// run 是 optional，可以不實作
+
+@end
+```
+### 限定類型
+
+這樣的參數表示 `animal` 必須是遵守 `Animal` 協定的物件。
+
+```objc
+- (void)makeItSpeak:(id<Animal>)animal {
+    [animal speak];
+}
+```
+
 
 <br />
 <br />
