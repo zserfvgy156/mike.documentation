@@ -1,5 +1,7 @@
 # iOS Framework for Unity
 
+<br>
+
 ## Unity 呼叫 iOS 方法 
 
 ### iOS 端專案
@@ -67,7 +69,6 @@ public void _sdkDidInit(string vendorid, bool isDebug) {
 }
 ```
 
-<br>
 <br>
 
 
@@ -219,8 +220,6 @@ public extension UnityBridge {
 }
 ```
 
-
-<br>
 <br>
 
 
@@ -235,7 +234,6 @@ public extension UnityBridge {
 ![image](images/md_image_2_1.png)
 
 <br>
-<br>
 
 
 ## framework 放置 Unity 的檔案路徑
@@ -243,10 +241,8 @@ public extension UnityBridge {
 ![image](images/md_image_3_1.png)
 <br>
 > **目前專案的路徑**  
-> <br>
 > ![image](images/md_image_3_2.png)
 
-<br>
 <br>
 
 ## Dynamic frameworks 相關處理
@@ -254,8 +250,6 @@ public extension UnityBridge {
 在 unity 專案一欄單擊選擇 framework，右側面板有選項要勾選 (下圖選項)。 
 
 ![image](images/md_image_4_1.png)
-
-<br>
 
 其他設定參考資料：
 * Static and Dynamic libraries/frameworks：[click](https://medium.com/@ji3g4kami/static-and-dynamic-frameworks-824eb82dceb0)
@@ -267,11 +261,8 @@ public extension UnityBridge {
 ## xcode 編譯相關設定
 
 ![image](images/md_image_5_1.png)
-<br>
 ![image](images/md_image_5_2.png)
-<br>
 ![image](images/md_image_5_3.png)
-<br>
 <br>
 
 ## 產 IPA
@@ -285,3 +276,6 @@ public extension UnityBridge {
 
 * https://betterprogramming.pub/setting-up-ios-framework-for-unity-9ef4e577db89
 * https://medium.com/@f_yuki/create-an-ios-native-plugin-for-unity-using-swift-bc27e3634339
+
+<br>
+<br>
