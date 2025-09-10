@@ -7,3 +7,4 @@
 2. [.h 檔宣告](2/README.md)
 3. [`id` vs `instancetype`](3/README.md)
 4. [Class  `new`/`alloc`/`allocWithZone` 差別](4/README.md)
+5. [@synthesize 用法](5/README.md)
