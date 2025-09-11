@@ -12,3 +12,4 @@
    3. [`id` vs `instancetype`](document/5/3/README.md)
    4. [Class  `new`/`alloc`/`allocWithZone` 差別](document/5/4/README.md)
    5. [@synthesize 用法](document/5/5/README.md)
+   6. [Immutable / Mutable、copy 踩坑](document/5/6/README.md)
