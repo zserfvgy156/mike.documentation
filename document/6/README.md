@@ -41,6 +41,8 @@ Sublime Text 的核心機制就是自動化。當你把一個 Python 檔儲存�
 
 這個指令會與它的 Python 檔案綁定，並且可以在任何視窗或檔案中被執行。
 
+![image](images/4.png)
+
 
 ### 如何使用外掛
 
