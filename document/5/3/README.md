@@ -37,8 +37,7 @@ id obj = [self createObject];
 
 #### `instancetype` 範例（較安全）：
 ```objc
-// XXX.m
-// 此處回傳 NSString 類型
+// MyPerson.m
 + (instancetype) person {
     return [[self alloc] init];
 }
